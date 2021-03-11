@@ -1,0 +1,36 @@
+pipeline {
+    agent any
+    environment {
+        imagename ="acr/authservice"
+        registry='556904013717.dkr.ecr.us-east-1.amazonaws.com'
+        dockerImage=''
+        ecrtag=''
+    }
+    stages {
+       
+        stage('Clean Install') {
+            steps {
+                sh "mvn clean install"
+                echo "$GIT_COMMIT"
+                echo "$BUILD_NUMBER"
+                sh "ecrtag='$GIT_COMMIT | cut -c1-10'"
+		echo "$ecrtag"
+            }
+        }
+        stage('Build Docker image') {
+            steps {
+               sh "docker build -t acr/authservice$ecrtag ."
+            }
+        }
+        stage('Tagging docker image') {
+            steps {
+               sh "docker tag acr/authservice:$BUILD_NUMBER 556904013717.dkr.ecr.us-east-1.amazonaws.com/acr/authservice:$ecrtag"
+            }
+        }
+        stage('Pushing to ECR') {
+            steps {
+                sh "docker push 556904013717.dkr.ecr.us-east-1.amazonaws.com/acr/authservice:$ecrtag"
+            }
+        }
+    }
+}
