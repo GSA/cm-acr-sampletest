@@ -1,4 +1,4 @@
-package gov.gsa.acr.tokenservice.config;
+package gov.gsa.acr.authservice.config;
 
 import java.io.IOException;
 import java.io.Serializable;

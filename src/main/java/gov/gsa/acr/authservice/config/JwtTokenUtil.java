@@ -1,4 +1,4 @@
-package gov.gsa.acr.tokenservice.config;
+package gov.gsa.acr.authservice.config;
 
 import java.io.Serializable;
 import java.util.Calendar;
@@ -16,7 +16,6 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
@@ -28,7 +27,7 @@ public class JwtTokenUtil implements Serializable {
 	
 	public static final long JWT_TOKEN_VALIDITY = 5*60*60;
 
-	@Value("${jwt.secret}")
+	@Value("${JWT_SECRET}")
 	private String secret;
 
 	public String getUsernameFromToken(String token) {
