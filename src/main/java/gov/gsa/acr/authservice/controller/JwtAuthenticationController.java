@@ -33,6 +33,23 @@ public class JwtAuthenticationController {
 	@Autowired
 	private UserDetailsService jwtInMemoryUserDetailsService;
 
+
+	@RequestMapping(value = "/liveliness", method = RequestMethod.GET)
+	public String getLiveliness() {
+		return "Alive";
+	}
+
+	@RequestMapping(value = "/readiness", method = RequestMethod.GET)
+	public String getReadinessliness() {
+		return "Ready";
+	}
+
+	@RequestMapping(value = "/token", method = RequestMethod.GET)
+	public ResponseEntity<?> getToken(@RequestBody JwtRequest authenticationRequest)
+			throws Exception {
+		return createAuthenticationToken(authenticationRequest);
+	}
+
 	@RequestMapping(value = "/getToken", method = RequestMethod.POST)
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest)
 			throws Exception {
