@@ -36,12 +36,12 @@ public class JwtAuthenticationController {
 
 	@RequestMapping(value = "/liveliness", method = RequestMethod.GET)
 	public String getLiveliness() {
-		return "Alive";
+		return "ALIVE";
 	}
 
 	@RequestMapping(value = "/readiness", method = RequestMethod.GET)
 	public String getReadinessliness() {
-		return "Ready";
+		return "READY";
 	}
 
 	@RequestMapping(value = "/token", method = RequestMethod.GET)
