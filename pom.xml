@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>gov.gsa.acr</groupId>
-	<artifactId>TokenService</artifactId>
+	<artifactId>AuthService</artifactId>
 	<version>0.0.1</version>
 	<name>AuthService</name>
 	<description>Micro service for ACR Token Service</description>

@@ -1,4 +1,4 @@
-package gov.gsa.acr.tokenservice.controller;
+package gov.gsa.acr.authservice.controller;
 
 import java.util.Objects;
 
@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import gov.gsa.acr.tokenservice.config.JwtTokenUtil;
-import gov.gsa.acr.tokenservice.model.JwtRequest;
-import gov.gsa.acr.tokenservice.model.JwtResponse;
+import gov.gsa.acr.authservice.config.JwtTokenUtil;
+import gov.gsa.acr.authservice.model.JwtRequest;
+import gov.gsa.acr.authservice.model.JwtResponse;
 
 @RestController
 @CrossOrigin

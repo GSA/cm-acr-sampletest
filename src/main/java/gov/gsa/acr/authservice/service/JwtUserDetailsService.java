@@ -1,4 +1,4 @@
-package gov.gsa.acr.tokenservice.service;
+package gov.gsa.acr.authservice.service;
 
 import java.util.ArrayList;
 
@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
 
-	@Value("${jwt.user}")
+	@Value("${JWT_USER}")
 	private String user;
 	
-	@Value("${jwt.password}")
+	@Value("${JWT_PASSWORD}")
 	private String password;
 	
 	@Override

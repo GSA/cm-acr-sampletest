@@ -12,6 +12,5 @@ RUN adduser -D -s /bin/sh acr
 WORKDIR /home/acr
 COPY --from=java-builder /app/target/*.jar app.jar
 RUN chown acr app.jar
-EXPOSE 8083
 USER acr
 ENTRYPOINT ["java","-jar","app.jar"]

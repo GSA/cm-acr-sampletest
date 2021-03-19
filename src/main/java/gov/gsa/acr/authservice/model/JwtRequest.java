@@ -1,4 +1,4 @@
-package gov.gsa.acr.tokenservice.model;
+package gov.gsa.acr.authservice.model;
 
 import java.io.Serializable;
 
