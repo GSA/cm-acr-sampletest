@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
 
-	@Value("${JWT_USER}")
+	@Value("${ACR_AUTH_USER}")
 	private String user;
 	
-	@Value("${JWT_PASSWORD}")
+	@Value("${ACR_AUTH_PASSWORD}")
 	private String password;
 	
 	@Override
