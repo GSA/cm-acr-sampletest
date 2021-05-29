@@ -2,6 +2,7 @@ package gov.gsa.acr.authservice;
 
 import gov.gsa.acr.authservice.controller.JwtAuthenticationController;
 import gov.gsa.acr.authservice.model.JwtRequest;
+import gov.gsa.acr.authservice.model.JwtResponse;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +32,13 @@ class AuthServiceApplicationTests {
         jwtRequest.setUsername(user);
         jwtRequest.setPassword(pwd);
 
-        ResponseEntity response = client.getToken(jwtRequest);
+        ResponseEntity<JwtResponse> response = (ResponseEntity<JwtResponse>) client.getToken(jwtRequest);
         assertEquals(response.getStatusCode(), HttpStatus.OK);
+
+        JwtResponse jwtResponse = response.getBody();
+        jwtRequest.setJwtToken(jwtResponse.getToken());
+        String tokenValidation = client.validateJwtToken(jwtRequest);
+        assertEquals(tokenValidation, "valid");
     }
 
     @Test
