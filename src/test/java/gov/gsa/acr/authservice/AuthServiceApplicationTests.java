@@ -32,7 +32,7 @@ class AuthServiceApplicationTests {
         jwtRequest.setUsername(user);
         jwtRequest.setPassword(pwd);
 
-        ResponseEntity<JwtResponse> response = (ResponseEntity<JwtResponse>) client.getToken(jwtRequest);
+        ResponseEntity<JwtResponse> response = client.getToken(jwtRequest);
         assertEquals(response.getStatusCode(), HttpStatus.OK);
 
         JwtResponse jwtResponse = response.getBody();
@@ -49,7 +49,8 @@ class AuthServiceApplicationTests {
         jwtRequest.setUsername(user);
         jwtRequest.setPassword(pwd);
         try {
-            ResponseEntity response = client.getToken(jwtRequest);
+            // bad credentials - should throw exception
+            client.getToken(jwtRequest);
         }
         catch (Exception e) {
             assertEquals(e.getMessage(), "INVALID_CREDENTIALS");
