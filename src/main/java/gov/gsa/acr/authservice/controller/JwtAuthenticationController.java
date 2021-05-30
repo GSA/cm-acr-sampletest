@@ -47,13 +47,6 @@ public class JwtAuthenticationController {
 	@RequestMapping(value = "/token", method = RequestMethod.GET)
 	public ResponseEntity<?> getToken(@RequestBody JwtRequest authenticationRequest)
 			throws Exception {
-		return createAuthenticationToken(authenticationRequest);
-	}
-
-	@RequestMapping(value = "/getToken", method = RequestMethod.POST)
-	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest)
-			throws Exception {
-
 		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
 		final UserDetails userDetails = jwtInMemoryUserDetailsService
@@ -77,7 +70,7 @@ public class JwtAuthenticationController {
 		}
 	}	
 	
-	@RequestMapping(value = "/validateToken", method = RequestMethod.POST)
+	@RequestMapping(value = "/validation", method = RequestMethod.POST)
 	public String validateJwtToken(@RequestBody JwtRequest tokenRequest)
 			throws Exception {	
 		
