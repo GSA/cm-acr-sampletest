@@ -14,3 +14,5 @@ COPY --from=java-builder /app/target/*.jar app.jar
 RUN chown acr app.jar
 USER acr
 ENTRYPOINT ["java","-jar","app.jar"]
+
+# mcaas testing
