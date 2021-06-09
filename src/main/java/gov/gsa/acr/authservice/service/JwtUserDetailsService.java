@@ -20,11 +20,11 @@ public class JwtUserDetailsService implements UserDetailsService {
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		password = "password";
+		password = "password"; 
 		if (user.equalsIgnoreCase(username)) {
 			return new User(user, password, new ArrayList<>());
 		} else {
-			throw new UsernameNotFoundException("User not found with username: " + username);
+			throw new UsernameNotFoundException("User not found with username : " + username);
 		}
 	}
 
