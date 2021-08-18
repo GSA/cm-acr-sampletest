@@ -8,6 +8,7 @@ RUN mvn -DskipTests clean install verify
 
 # --- copy jar file from previous stage
 FROM openjdk:8-jre-alpine
+RUN apk update && apk upgrade --available
 RUN adduser -D -s /bin/sh acr
 WORKDIR /home/acr
 COPY --from=java-builder /app/target/*.jar app.jar
