@@ -2,6 +2,10 @@ package gov.gsa.acr.authservice.controller;
 
 import java.util.Objects;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +28,8 @@ import gov.gsa.acr.authservice.model.JwtResponse;
 @CrossOrigin
 public class JwtAuthenticationController {
 
+	Logger logger = LoggerFactory.getLogger(JwtAuthenticationController.class);
+	
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
@@ -45,19 +51,22 @@ public class JwtAuthenticationController {
 	}
 
 	@RequestMapping(value = "/token", method = RequestMethod.POST)
-	public ResponseEntity<JwtResponse> getToken(@RequestBody JwtRequest authenticationRequest)
+	public ResponseEntity<JwtResponse> getToken(HttpServletRequest request, @RequestBody JwtRequest authenticationRequest)
 			throws Exception {
-		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
-
+		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword(), request);		
+		 
 		final UserDetails userDetails = jwtInMemoryUserDetailsService
 				.loadUserByUsername(authenticationRequest.getUsername());
 
 		final String token = jwtTokenUtil.generateToken(userDetails);
+		
+		logger.info("Loggedin User : "+authenticationRequest.getUsername()+ " for resource :"+request.getRequestURI()+
+				" from ip address : "+request.getRemoteAddr()+" Host: " + request.getRemoteHost());
 
 		return ResponseEntity.ok(new JwtResponse(token));
 	}
 
-	private void authenticate(String username, String password) throws Exception {
+	private void authenticate(String username, String password, HttpServletRequest request) throws Exception {
 		Objects.requireNonNull(username);
 		Objects.requireNonNull(password);
 
@@ -66,6 +75,8 @@ public class JwtAuthenticationController {
 		} catch (DisabledException e) {
 			throw new Exception("USER_DISABLED", e);
 		} catch (BadCredentialsException e) {
+			logger.error(" ***Login attempt FAILED***  User : "+username+ " Requested Resource :"+request.getRequestURI()+
+					" IP address : "+request.getRemoteAddr()+" Host: " + request.getRemoteHost());
 			throw new Exception("INVALID_CREDENTIALS", e);
 		}
 	}	

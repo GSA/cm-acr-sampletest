@@ -67,13 +67,13 @@ public class JwtTokenUtil implements Serializable {
 	}
 
 	private String doGenerateToken(Map<String, Object> claims, String subject) {
-
+		// set the token validity to 24 hours.
 		Calendar cal = Calendar.getInstance();
-	    cal.add(Calendar.YEAR, 1);
+	    cal.add(Calendar.HOUR_OF_DAY, 24);
 	    Date expiryDate = cal.getTime();
 	     
 		return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-				.setExpiration(expiryDate/*new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY*1000)*/).signWith(SignatureAlgorithm.HS512, secret).compact();
+				.setExpiration(expiryDate).signWith(SignatureAlgorithm.HS512, secret).compact();
 	}
 
 	public Boolean canTokenBeRefreshed(String token) {
