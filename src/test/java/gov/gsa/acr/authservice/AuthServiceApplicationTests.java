@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -21,6 +22,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import java.util.Calendar;
 
 @SpringBootTest(properties = { 
@@ -42,8 +46,9 @@ class AuthServiceApplicationTests {
         JwtRequest jwtRequest = new JwtRequest();
         jwtRequest.setUsername(user);
         jwtRequest.setPassword(pwd);
+        MockHttpServletRequest request = new MockHttpServletRequest();
 
-        ResponseEntity<JwtResponse> response = client.getToken(jwtRequest);
+        ResponseEntity<JwtResponse> response = client.getToken(request, jwtRequest);
         assertEquals(response.getStatusCode(), HttpStatus.OK);
 
         JwtResponse jwtResponse = response.getBody();
@@ -71,9 +76,12 @@ class AuthServiceApplicationTests {
         JwtRequest jwtRequest = new JwtRequest();
         jwtRequest.setUsername(user);
         jwtRequest.setPassword(pwd);
+        
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        
         try {
             // bad credentials - should throw exception
-            client.getToken(jwtRequest);
+            client.getToken(request, jwtRequest);
         }
         catch (Exception e) {
             assertEquals(e.getMessage(), "INVALID_CREDENTIALS");
