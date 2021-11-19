@@ -16,7 +16,8 @@
 
 	<properties>
 		<java.version>8</java.version>
-		<maven.test.skip>false</maven.test.skip>
+		<tomcat.version>9.0.54</tomcat.version>
+		<maven.test.skip>true</maven.test.skip>
 	</properties>
 
 	<dependencies>
