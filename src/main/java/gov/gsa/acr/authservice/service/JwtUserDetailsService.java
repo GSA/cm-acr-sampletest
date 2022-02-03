@@ -18,10 +18,18 @@ public class JwtUserDetailsService implements UserDetailsService {
 	@Value("${ACR_AUTH_PASSWORD}")
 	private String password;
 	
+	@Value("${CCP_AUTH_USER}")
+	private String ccpUser;
+	
+	@Value("${CCP_AUTH_PASSWORD}")
+	private String ccpPassword;
+	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {		 
 		if (user.equalsIgnoreCase(username)) {
 			return new User(user, password, new ArrayList<>());
+		} else if (ccpUser.equalsIgnoreCase(username)) {
+			return new User(ccpUser, ccpPassword, new ArrayList<>()); 
 		} else {
 			throw new UsernameNotFoundException("User not found with username : " + username);
 		}

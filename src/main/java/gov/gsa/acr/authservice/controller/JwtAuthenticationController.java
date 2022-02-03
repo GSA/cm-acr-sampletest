@@ -97,4 +97,19 @@ public class JwtAuthenticationController {
 		return tokenValidity;
 	}
 	
+	@RequestMapping(value = "/ccp/validation", method = RequestMethod.POST)
+	public String validateCCPToken(@RequestBody JwtRequest tokenRequest)
+			throws Exception {	
+		
+		String jwtToken = tokenRequest.getJwtToken();
+		String tokenValidity = "invalid";
+		
+		if(jwtTokenUtil.getUsernameFromToken(jwtToken) != null && 
+				jwtTokenUtil.getUsernameFromToken(jwtToken).equalsIgnoreCase("ccp") && 
+				jwtTokenUtil.validateToken(jwtToken)){			
+			tokenValidity = "valid";
+		}				
+	
+		return tokenValidity;
+	}
 }
