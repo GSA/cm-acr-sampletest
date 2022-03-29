@@ -9,7 +9,6 @@ COPY ./pom.xml /app/
 RUN mvn -DskipTests clean install verify
 
 
-
 # --- copy jar file from previous stage
 #FROM openjdk:8-jre-alpine
 FROM adoptopenjdk/openjdk11:jre-11.0.6_10-alpine
