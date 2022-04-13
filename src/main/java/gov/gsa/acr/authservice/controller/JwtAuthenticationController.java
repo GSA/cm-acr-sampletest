@@ -29,7 +29,9 @@ import gov.gsa.acr.authservice.model.JwtResponse;
 public class JwtAuthenticationController {
 
 	Logger logger = LoggerFactory.getLogger(JwtAuthenticationController.class);
-	
+	private static String ACR_USER = "acr";
+	private static String CCP_USER = "ccp";
+
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
@@ -86,14 +88,14 @@ public class JwtAuthenticationController {
 			throws Exception {	
 		
 		String jwtToken = tokenRequest.getJwtToken();
-		String tokenValidity = null;
-		boolean isValid = jwtTokenUtil.validateToken(jwtToken);
-
-		if(isValid) {
+		String tokenValidity = "invalid";
+		
+		if(jwtTokenUtil.getUsernameFromToken(jwtToken) != null && 
+				jwtTokenUtil.getUsernameFromToken(jwtToken).equalsIgnoreCase(ACR_USER) && 
+				jwtTokenUtil.validateToken(jwtToken)){			
 			tokenValidity = "valid";
-		} else {
-			tokenValidity = "invalid";
 		}
+
 		return tokenValidity;
 	}
 	
@@ -105,7 +107,7 @@ public class JwtAuthenticationController {
 		String tokenValidity = "invalid";
 		
 		if(jwtTokenUtil.getUsernameFromToken(jwtToken) != null && 
-				jwtTokenUtil.getUsernameFromToken(jwtToken).equalsIgnoreCase("ccp") && 
+				jwtTokenUtil.getUsernameFromToken(jwtToken).equalsIgnoreCase(CCP_USER) && 
 				jwtTokenUtil.validateToken(jwtToken)){			
 			tokenValidity = "valid";
 		}				
