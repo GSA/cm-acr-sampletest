@@ -24,12 +24,20 @@ public class JwtUserDetailsService implements UserDetailsService {
 	@Value("${CCP_AUTH_PASSWORD}")
 	private String ccpPassword;
 	
+	@Value("${CMO_AUTH_USER}")
+	private String cmoUser;
+	
+	@Value("${CMO_AUTH_PASSWORD}")
+	private String cmoPassword;
+	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {		 
 		if (user.equalsIgnoreCase(username)) {
 			return new User(user, password, new ArrayList<>());
 		} else if (ccpUser.equalsIgnoreCase(username)) {
 			return new User(ccpUser, ccpPassword, new ArrayList<>()); 
+		} else if (cmoUser.equalsIgnoreCase(username)) {
+			return new User(cmoUser, cmoPassword, new ArrayList<>()); 
 		} else {
 			throw new UsernameNotFoundException("User not found with username : " + username);
 		}
