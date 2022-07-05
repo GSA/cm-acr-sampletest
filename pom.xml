@@ -52,10 +52,6 @@
 					<groupId>org.apache.logging.log4j</groupId>
 					<artifactId>log4j-to-slf4j</artifactId>
 				</exclusion>
-				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-webmvc</artifactId>
-				</exclusion>
 			</exclusions>
 		</dependency>
 		 <dependency>
