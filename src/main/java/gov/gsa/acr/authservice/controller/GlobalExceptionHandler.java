@@ -22,8 +22,9 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     String globalExceptionHandler(HttpServletRequest request,
                                    HttpServletResponse response, Exception ex) {
-        logger.error("API call to "+request.getRequestURL().toString()+" failed.", ex);
-        return ex.getMessage();
+        String exMsg = ex.getMessage();
+        logger.error("API call to "+request.getRequestURL().toString()+" failed with the following message: " + exMsg);
+        return exMsg;
     }
 
     @ResponseBody

@@ -131,13 +131,6 @@ public class JwtAuthenticationController {
 		return jwtTokenUtil.getExpirationDateFromToken(jwtToken);
 	}
 
-	@RequestMapping(value = "/authorities", method = RequestMethod.POST)
-	public Collection<? extends GrantedAuthority> authorities(@RequestBody JwtRequest tokenRequest)
-			throws Exception {
-		String jwtToken = tokenRequest.getJwtToken();
-		return jwtTokenUtil.getAuthorities(jwtToken);
-	}
-
 	@RequestMapping(value = "/roles", method = RequestMethod.POST)
 	public String[] roles(@RequestBody JwtRequest tokenRequest)
 			throws Exception {
