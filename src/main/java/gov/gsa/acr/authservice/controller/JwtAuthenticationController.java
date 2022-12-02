@@ -1,9 +1,9 @@
 package gov.gsa.acr.authservice.controller;
 
-import java.util.Objects;
-
-import javax.servlet.http.HttpServletRequest;
-
+import gov.gsa.acr.authservice.config.JwtTokenUtil;
+import gov.gsa.acr.authservice.model.JwtRequest;
+import gov.gsa.acr.authservice.model.JwtResponse;
+import io.jsonwebtoken.Claims;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,17 +12,15 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import gov.gsa.acr.authservice.config.JwtTokenUtil;
-import gov.gsa.acr.authservice.model.JwtRequest;
-import gov.gsa.acr.authservice.model.JwtResponse;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Objects;
 
 @RestController
 @CrossOrigin
@@ -53,31 +51,26 @@ public class JwtAuthenticationController {
 	@RequestMapping(value = "/token", method = RequestMethod.POST)
 	public ResponseEntity<JwtResponse> getToken(HttpServletRequest request, @RequestBody JwtRequest authenticationRequest)
 			throws Exception {
-		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword(), request);		
-		 
-		final UserDetails userDetails = jwtInMemoryUserDetailsService
-				.loadUserByUsername(authenticationRequest.getUsername());
+		Authentication authentication =  authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword(), request);
 
-		final String token = jwtTokenUtil.generateToken(userDetails);
-		
+		final String token = jwtTokenUtil.generateToken(authentication);
 		logger.info("Loggedin User : "+authenticationRequest.getUsername()+ " for resource :"+request.getRequestURI()+
 				" from ip address : "+request.getRemoteAddr()+" Host: " + request.getRemoteHost());
 
 		return ResponseEntity.ok(new JwtResponse(token));
 	}
 
-	private void authenticate(String username, String password, HttpServletRequest request) throws Exception {
+	private Authentication authenticate(String username, String password, HttpServletRequest request) throws Exception {
 		Objects.requireNonNull(username);
 		Objects.requireNonNull(password);
 
 		try {
-			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-		} catch (DisabledException e) {
-			throw new Exception("USER_DISABLED", e);
-		} catch (BadCredentialsException e) {
+			return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+		}
+		catch (BadCredentialsException e) {
 			logger.error(" ***Login attempt FAILED***  User : "+username+ " Requested Resource :"+request.getRequestURI()+
 					" IP address : "+request.getRemoteAddr()+" Host: " + request.getRemoteHost());
-			throw new Exception("INVALID_CREDENTIALS", e);
+			throw e;
 		}
 	}	
 	
@@ -111,5 +104,44 @@ public class JwtAuthenticationController {
 		}				
 	
 		return tokenValidity;
+	}
+
+	@RequestMapping(value = "/claims", method = RequestMethod.POST)
+	public Claims claims(@RequestBody JwtRequest tokenRequest)
+			throws Exception {
+
+		String jwtToken = tokenRequest.getJwtToken();
+		return jwtTokenUtil.getAllClaimsFromToken(jwtToken);
+	}
+
+	@RequestMapping(value = "/username", method = RequestMethod.POST)
+	public String userName(@RequestBody JwtRequest tokenRequest)
+			throws Exception {
+
+		String jwtToken = tokenRequest.getJwtToken();
+		return jwtTokenUtil.getUsernameFromToken(jwtToken);
+	}
+
+
+	@RequestMapping(value = "/expiration-date", method = RequestMethod.POST)
+	public Date expirationDate(@RequestBody JwtRequest tokenRequest)
+			throws Exception {
+
+		String jwtToken = tokenRequest.getJwtToken();
+		return jwtTokenUtil.getExpirationDateFromToken(jwtToken);
+	}
+
+	@RequestMapping(value = "/authorities", method = RequestMethod.POST)
+	public Collection<? extends GrantedAuthority> authorities(@RequestBody JwtRequest tokenRequest)
+			throws Exception {
+		String jwtToken = tokenRequest.getJwtToken();
+		return jwtTokenUtil.getAuthorities(jwtToken);
+	}
+
+	@RequestMapping(value = "/roles", method = RequestMethod.POST)
+	public String[] roles(@RequestBody JwtRequest tokenRequest)
+			throws Exception {
+		String jwtToken = tokenRequest.getJwtToken();
+		return jwtTokenUtil.getRoles(jwtToken);
 	}
 }
