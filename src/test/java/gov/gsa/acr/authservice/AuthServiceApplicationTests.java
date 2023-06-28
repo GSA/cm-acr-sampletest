@@ -76,9 +76,9 @@ class AuthServiceApplicationTests {
         JwtRequest jwtRequest = new JwtRequest();
         jwtRequest.setUsername(user);
         jwtRequest.setPassword(pwd);
-        
+
         MockHttpServletRequest request = new MockHttpServletRequest();
-        
+
         try {
             // bad credentials - should throw exception
             client.getToken(request, jwtRequest);
