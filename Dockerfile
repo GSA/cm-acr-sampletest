@@ -2,8 +2,7 @@
 #FROM maven:3.6.3-openjdk-11 as java-builder
 #FROM adoptopenjdk/maven-openjdk11 as java-builder
 FROM maven:3.8.3-amazoncorretto-17 as java-builder
-#RUN apt-get update && apt-get -y upgrade
-RUN yum update && yum upgrade
+RUN apt-get update && apt-get -y upgrade
 RUN mkdir -p /app
 WORKDIR /app
 COPY ./src /app/src
@@ -12,7 +11,8 @@ RUN mvn -DskipTests clean install verify
 
 # --- copy jar file from previous stage
 #FROM openjdk:8-jre-alpine
-FROM adoptopenjdk/openjdk11:jre-11.0.6_10-alpine
+#FROM adoptopenjdk/openjdk11:jre-11.0.6_10-alpine
+FROM amazoncorretto:17-alpine-jdk
 RUN apk update && apk upgrade --available
 RUN adduser -D -s /bin/sh acr
 WORKDIR /home/acr
