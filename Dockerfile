@@ -3,7 +3,7 @@
 #FROM adoptopenjdk/maven-openjdk11 as java-builder
 FROM maven:3.8.3-amazoncorretto-17 as java-builder
 #RUN apt-get update && apt-get -y upgrade
-RUN apk update && apk upgrade --available
+RUN yum update -y
 RUN mkdir -p /app
 WORKDIR /app
 COPY ./src /app/src
