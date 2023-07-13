@@ -15,7 +15,7 @@
 	<description>Micro service for ACR AuthService</description>
 
 	<properties>
-		<java.version>8</java.version>
+		<java.version>17</java.version>
 		<tomcat.version>9.0.54</tomcat.version>
 		<log4j2.version>2.16.0</log4j2.version>
 		<maven.test.skip>false</maven.test.skip>
