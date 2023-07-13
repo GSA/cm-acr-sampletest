@@ -13,9 +13,8 @@ RUN mvn -DskipTests clean install verify
 # --- copy jar file from previous stage
 #FROM openjdk:8-jre-alpine
 #FROM adoptopenjdk/openjdk11:jre-11.0.6_10-alpine
-#RUN apk update && apk upgrade --available
-FROM amazoncorretto:17
-RUN yum update && yum upgrade
+FROM eclipse-temurin:17-alpine
+RUN apk update && apk upgrade --available
 RUN adduser -D -s /bin/sh acr
 WORKDIR /home/acr
 COPY --from=java-builder /app/target/*.jar app.jar
