@@ -33,19 +33,34 @@ public class WebSecurityConfig {
 	}
 
 
+//	@Bean
+//	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+//
+//		httpSecurity.csrf().disable()
+//				.authorizeRequests().antMatchers("/**").permitAll().
+//				anyRequest().authenticated().and().
+//				// make sure we use stateless session; session won't be used to
+//				// store user's state.
+//						exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
+//				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//		return httpSecurity.build();
+//		// Add a filter to validate the tokens with every request
+//		//	httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+//	}
+
+
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 
-		httpSecurity.csrf().disable()
-				.authorizeRequests().antMatchers("/**").permitAll().
-				anyRequest().authenticated().and().
-				// make sure we use stateless session; session won't be used to
-				// store user's state.
-						exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		httpSecurity.csrf(csrf->csrf.disable())
+				.authorizeHttpRequests(auth->auth.requestMatchers("/**")
+						.permitAll()
+						.anyRequest()
+						.authenticated())
+						.exceptionHandling(ex->ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))
+						.sessionManagement(se->se.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
 		return httpSecurity.build();
-		// Add a filter to validate the tokens with every request
-		//	httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 
 }
