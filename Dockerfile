@@ -1,10 +1,10 @@
-FROM 752281881774.dkr.ecr.us-east-1.amazonaws.com/odp_openjdk17:20230727
+FROM 752281881774.dkr.ecr.us-east-1.amazonaws.com/odp_openjdk17:20230727 as java-builder
 RUN mkdir -p ./src ./target
 COPY ./src ./src
 COPY ./pom.xml ./
 
 # --- copy jar file from previous stage
-COPY ./target/*.jar app.jar
+COPY --from=java-builder ./target/*.jar app.jar
 COPY startup.sh ./
 CMD [ "sh", "startup.sh" ]
 
