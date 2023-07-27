@@ -1,10 +1,11 @@
-FROM 752281881774.dkr.ecr.us-east-1.amazonaws.com/odp_openjdk17:20230727 as java-builder
+FROM 752281881774.dkr.ecr.us-east-1.amazonaws.com/odp_openjdk17:20230727
 RUN mkdir -p ./src ./target
 COPY ./src ./src
 COPY ./pom.xml ./
+RUN mvn -DskipTests clean install verify
 
 # --- copy jar file from previous stage
-COPY --from=java-builder ./target/*.jar app.jar
+COPY ./target/*.jar app.jar
 COPY startup.sh ./
 CMD [ "sh", "startup.sh" ]
 
