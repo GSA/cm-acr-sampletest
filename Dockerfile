@@ -7,7 +7,8 @@ RUN ls -lart ./target/
 RUN find ./target -iname '*.jar'
 
 # --- copy jar file from previous stage
-COPY ./target/auth-service.jar app.jar
+RUN cp ./target/*.jar app.jar
+#COPY ./target/auth-service.jar app.jar
 #COPY ./target/*.jar app.jar
 COPY startup.sh ./
 CMD [ "sh", "startup.sh" ]
