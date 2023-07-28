@@ -3,6 +3,8 @@ RUN mkdir -p ./src
 COPY ./src ./src
 COPY ./pom.xml ./
 RUN mvn -DskipTests clean install verify
+RUN ls -lart ./
+RUN ls -lart /
 
 # --- copy jar file from previous stage
 COPY ./target/*.jar app.jar
