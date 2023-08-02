@@ -23,20 +23,18 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import java.util.Calendar;
 
-@SpringBootTest(properties = { 
-    "ACR_AUTH_JWT_SECRET=abcdefg",
-    "ACR_AUTH_USER=fake_user",
-    "ACR_AUTH_PASSWORD=$2a$10$oEb/eVKSKH5rWzSkZDFyXep0eU8ZENN/vvWS.56tRJEQ7ZHNrzsw."}) // fake_password
+@SpringBootTest(properties = {
+        "ACR_AUTH_JWT_SECRET=abcdefg",
+        "ACR_AUTH_USER=fake_user",
+        "ACR_AUTH_PASSWORD=$2a$10$oEb/eVKSKH5rWzSkZDFyXep0eU8ZENN/vvWS.56tRJEQ7ZHNrzsw."}) // fake_password
 class AuthServiceApplicationTests {
 
     @Autowired
     JwtAuthenticationController client;
 
-	@Value("${ACR_AUTH_JWT_SECRET}")
+    @Value("${ACR_AUTH_JWT_SECRET}")
     String JWT_SECRET;
 
     @Test
@@ -60,7 +58,7 @@ class AuthServiceApplicationTests {
     @Test
     public void testExpiredJwt() throws Exception {
         Calendar yesterday = Calendar.getInstance();
-		yesterday.add(Calendar.DAY_OF_MONTH,  -1);
+        yesterday.add(Calendar.DAY_OF_MONTH,  -1);
 
         String jwt = generateJwt("fake", yesterday);
         JwtRequest jwtRequest = new JwtRequest();
@@ -76,9 +74,9 @@ class AuthServiceApplicationTests {
         JwtRequest jwtRequest = new JwtRequest();
         jwtRequest.setUsername(user);
         jwtRequest.setPassword(pwd);
-        
+
         MockHttpServletRequest request = new MockHttpServletRequest();
-        
+
         try {
             // bad credentials - should throw exception
             client.getToken(request, jwtRequest);
@@ -98,10 +96,10 @@ class AuthServiceApplicationTests {
     }
 
     private String generateJwt(String subject, Calendar expireDate) {
-	    Date expiryDate = expireDate.getTime();
-		Map<String, Object> claims = new HashMap<>();
-		return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-				.setExpiration(expiryDate/*new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY*1000)*/).signWith(SignatureAlgorithm.HS512, JWT_SECRET).compact();
-	}
+        Date expiryDate = expireDate.getTime();
+        Map<String, Object> claims = new HashMap<>();
+        return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(expiryDate/*new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY*1000)*/).signWith(SignatureAlgorithm.HS512, JWT_SECRET).compact();
+    }
 
 }
