@@ -8,8 +8,6 @@ RUN mvn -DskipTests clean install verify
 RUN find $M2_HOME/ -iname '*.jar'
 Run rm -rf /home/gsa-user/.m2/repository
 RUN find /home/gsa-user/.m2/ -iname '*.jar'
-#Run rm -rf /root/.m2/repository
-RUN find /root/.m2/ -iname '*.jar'
 
 # --- copy jar file from previous stage
 RUN cp ./target/*.jar app.jar
