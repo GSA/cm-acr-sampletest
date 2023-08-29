@@ -4,6 +4,8 @@ COPY ./src ./src
 COPY ./pom.xml ./
 RUN mvn -DskipTests clean install verify
 RUN find $M2_HOME/ -iname '*.jar'
+RUN ls -lart /hom/gsa-user/.m2/
+RUN ls -lart /opt/maven-*
 
 # --- copy jar file from previous stage
 RUN cp ./target/*.jar app.jar
