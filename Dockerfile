@@ -3,6 +3,7 @@ RUN mkdir -p ./src
 COPY ./src ./src
 COPY ./pom.xml ./
 RUN mvn -DskipTests clean install verify
+RUN find $M2_HOME/ -iname '*.jar'
 
 # --- copy jar file from previous stage
 RUN cp ./target/*.jar app.jar
