@@ -1,4 +1,4 @@
-FROM 752281881774.dkr.ecr.us-east-1.amazonaws.com/odp_openjdk17:20230903
+FROM 752281881774.dkr.ecr.us-east-1.amazonaws.com/odp_openjdk17:20230918
 RUN mkdir -p ./src 
 COPY ./src ./src
 COPY ./pom.xml ./
