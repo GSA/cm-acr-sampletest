@@ -2,7 +2,7 @@ package gov.gsa.acr.authservice.controller;
 
 import java.util.Objects;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +29,12 @@ import gov.gsa.acr.authservice.model.JwtResponse;
 public class JwtAuthenticationController {
 
 	Logger logger = LoggerFactory.getLogger(JwtAuthenticationController.class);
-	
+
+	private static String ACR_USER = "acr";
+	private static String CCP_USER = "ccp";
+	private static String CMO_USER = "cmo";
+
+
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
@@ -86,14 +91,30 @@ public class JwtAuthenticationController {
 			throws Exception {	
 		
 		String jwtToken = tokenRequest.getJwtToken();
-		String tokenValidity = null;
-		boolean isValid = jwtTokenUtil.validateToken(jwtToken);
 
-		if(isValid) {
+		String tokenValidity = "invalid";
+		
+		if(jwtTokenUtil.getUsernameFromToken(jwtToken) != null && 
+								jwtTokenUtil.validateToken(jwtToken)){			
 			tokenValidity = "valid";
-		} else {
-			tokenValidity = "invalid";
 		}
+
+		return tokenValidity;
+	}
+	
+	@RequestMapping(value = "/acr/validation", method = RequestMethod.POST)
+	public String validateACRToken(@RequestBody JwtRequest tokenRequest)
+			throws Exception {	
+		
+		String jwtToken = tokenRequest.getJwtToken();
+		String tokenValidity = "invalid";
+		
+		if(jwtTokenUtil.getUsernameFromToken(jwtToken) != null && 
+				jwtTokenUtil.getUsernameFromToken(jwtToken).equalsIgnoreCase(ACR_USER) && 
+				jwtTokenUtil.validateToken(jwtToken)){			
+			tokenValidity = "valid";
+		}	
+
 		return tokenValidity;
 	}
 	
@@ -105,7 +126,23 @@ public class JwtAuthenticationController {
 		String tokenValidity = "invalid";
 		
 		if(jwtTokenUtil.getUsernameFromToken(jwtToken) != null && 
-				jwtTokenUtil.getUsernameFromToken(jwtToken).equalsIgnoreCase("ccp") && 
+				jwtTokenUtil.getUsernameFromToken(jwtToken).equalsIgnoreCase(CCP_USER) && 
+				jwtTokenUtil.validateToken(jwtToken)){			
+			tokenValidity = "valid";
+		}				
+	
+		return tokenValidity;
+	}
+	
+	@RequestMapping(value = "/cmo/validation", method = RequestMethod.POST)
+	public String validateCMOToken(@RequestBody JwtRequest tokenRequest)
+			throws Exception {	
+		
+		String jwtToken = tokenRequest.getJwtToken();
+		String tokenValidity = "invalid";
+		
+		if(jwtTokenUtil.getUsernameFromToken(jwtToken) != null && 
+				jwtTokenUtil.getUsernameFromToken(jwtToken).equalsIgnoreCase(CMO_USER) && 
 				jwtTokenUtil.validateToken(jwtToken)){			
 			tokenValidity = "valid";
 		}				
