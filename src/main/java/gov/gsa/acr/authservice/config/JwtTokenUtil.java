@@ -69,7 +69,7 @@ public class JwtTokenUtil implements Serializable {
 	private String doGenerateToken(Map<String, Object> claims, String subject) {
 		// set the token validity to 24 hours.
 		Calendar cal = Calendar.getInstance();
-	    cal.add(Calendar.HOUR_OF_DAY, 24);
+	    cal.add(Calendar.MINUTE, 5);
 	    Date expiryDate = cal.getTime();
 	     
 		return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
