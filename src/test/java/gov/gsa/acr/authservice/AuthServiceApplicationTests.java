@@ -26,9 +26,9 @@ import java.util.Map;
 import java.util.Calendar;
 
 @SpringBootTest(properties = {
-        "ACR_AUTH_JWT_SECRET=acr123",
-        "ACR_AUTH_USER=acr",
-        "ACR_AUTH_PASSWORD=$2a$10$slYQmyNdGzTn7ZLBXBChFOC9f6kFjAqPhccnP6DxlWXx2lPk1C3G6"}) // fake_password
+        "ACR_AUTH_JWT_SECRET=abcdefg",
+        "ACR_AUTH_USER=fake_user",
+        "ACR_AUTH_PASSWORD=$2a$10$oEb/eVKSKH5rWzSkZDFyXep0eU8ZENN/vvWS.56tRJEQ7ZHNrzsw."}) // fake_password
 class AuthServiceApplicationTests {
 
     @Autowired
@@ -89,7 +89,7 @@ class AuthServiceApplicationTests {
     @Test
     public void generateEncryptedPassword() throws Exception {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String clearPassword = "fake_password";
+        String clearPassword = "password";
         String encruptedPassword = passwordEncoder.encode(clearPassword);
         System.out.println(encruptedPassword);
         assertTrue(passwordEncoder.matches(clearPassword, encruptedPassword));
