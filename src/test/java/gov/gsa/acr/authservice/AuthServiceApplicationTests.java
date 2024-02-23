@@ -26,9 +26,9 @@ import java.util.Map;
 import java.util.Calendar;
 
 @SpringBootTest(properties = {
-        "ACR_AUTH_JWT_SECRET=abcdefg",
-        "ACR_AUTH_USER=fake_user",
-        "ACR_AUTH_PASSWORD=$2a$10$oEb/eVKSKH5rWzSkZDFyXep0eU8ZENN/vvWS.56tRJEQ7ZHNrzsw."}) // fake_password
+        "ACR_AUTH_JWT_SECRET=acr123",
+        "ACR_AUTH_USER=acr",
+        "ACR_AUTH_PASSWORD=$2a$10$slYQmyNdGzTn7ZLBXBChFOC9f6kFjAqPhccnP6DxlWXx2lPk1C3G6"}) // fake_password
 class AuthServiceApplicationTests {
 
     @Autowired
@@ -39,8 +39,8 @@ class AuthServiceApplicationTests {
 
     @Test
     public void testValidCredential() throws Exception {
-        String user = "acr";
-        String pwd = "password";
+        String user = "fake_user";
+        String pwd = "fake_password";
         JwtRequest jwtRequest = new JwtRequest();
         jwtRequest.setUsername(user);
         jwtRequest.setPassword(pwd);
