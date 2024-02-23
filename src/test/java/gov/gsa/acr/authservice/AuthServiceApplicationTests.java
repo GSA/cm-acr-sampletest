@@ -39,8 +39,8 @@ class AuthServiceApplicationTests {
 
     @Test
     public void testValidCredential() throws Exception {
-        String user = "fake_user";
-        String pwd = "fake_password";
+        String user = "acr";
+        String pwd = "password";
         JwtRequest jwtRequest = new JwtRequest();
         jwtRequest.setUsername(user);
         jwtRequest.setPassword(pwd);
