@@ -89,7 +89,7 @@ class AuthServiceApplicationTests {
     @Test
     public void generateEncryptedPassword() throws Exception {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String clearPassword = "password";
+        String clearPassword = "fake_password";
         String encruptedPassword = passwordEncoder.encode(clearPassword);
         System.out.println(encruptedPassword);
         assertTrue(passwordEncoder.matches(clearPassword, encruptedPassword));
