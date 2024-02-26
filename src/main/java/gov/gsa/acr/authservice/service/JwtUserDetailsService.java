@@ -42,6 +42,12 @@ public class JwtUserDetailsService implements UserDetailsService {
 	@Value("${ELIB_AUTH_PASSWORD}")
 	private String elibPassword;
 
+	@Value("${EBUY_AUTH_USER}")
+	private String ebuyUser;
+
+	@Value("${EBUY_AUTH_PASSWORD}")
+	private String ebuyPassword;
+
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {		 
 		if (user.equalsIgnoreCase(username)) {
@@ -54,6 +60,8 @@ public class JwtUserDetailsService implements UserDetailsService {
 			return new User(advUser, advPassword, new ArrayList<>());
 		} else if (elibUser.equalsIgnoreCase(username)) {
 			return new User(elibUser, elibPassword, new ArrayList<>());
+		} else if (ebuyUser.equalsIgnoreCase(username)) {
+			return new User(ebuyUser, ebuyPassword, new ArrayList<>());
 		} else {
 			throw new UsernameNotFoundException("User not found with username : " + username);
 		}

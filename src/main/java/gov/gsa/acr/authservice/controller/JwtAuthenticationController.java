@@ -33,10 +33,9 @@ public class JwtAuthenticationController {
 	private static String ACR_USER = "acr";
 	private static String CCP_USER = "ccp";
 	private static String CMO_USER = "cmo";
-
 	private static String ADV_USER = "adv";
-
 	private static String ELIB_USER = "elib";
+	private static String EBUY_USER = "ebuy";
 
 
 	@Autowired
@@ -179,6 +178,22 @@ public class JwtAuthenticationController {
 
 		if(jwtTokenUtil.getUsernameFromToken(jwtToken) != null &&
 				jwtTokenUtil.getUsernameFromToken(jwtToken).equalsIgnoreCase(ELIB_USER) &&
+				jwtTokenUtil.validateToken(jwtToken)){
+			tokenValidity = "valid";
+		}
+
+		return tokenValidity;
+	}
+
+	@RequestMapping(value = "/ebuy/validation", method = RequestMethod.POST)
+	public String validateEbuyToken(@RequestBody JwtRequest tokenRequest)
+			throws Exception {
+
+		String jwtToken = tokenRequest.getJwtToken();
+		String tokenValidity = "invalid";
+
+		if(jwtTokenUtil.getUsernameFromToken(jwtToken) != null &&
+				jwtTokenUtil.getUsernameFromToken(jwtToken).equalsIgnoreCase(EBUY_USER) &&
 				jwtTokenUtil.validateToken(jwtToken)){
 			tokenValidity = "valid";
 		}
