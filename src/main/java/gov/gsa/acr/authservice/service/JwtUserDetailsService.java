@@ -29,7 +29,25 @@ public class JwtUserDetailsService implements UserDetailsService {
 	
 	@Value("${CMO_AUTH_PASSWORD}")
 	private String cmoPassword;
-	
+
+	@Value("${ADV_AUTH_USER}")
+	private String advUser;
+
+	@Value("${ADV_AUTH_PASSWORD}")
+	private String advPassword;
+
+	@Value("${ELIB_AUTH_USER}")
+	private String elibUser;
+
+	@Value("${ELIB_AUTH_PASSWORD}")
+	private String elibPassword;
+
+	@Value("${EBUY_AUTH_USER}")
+	private String ebuyUser;
+
+	@Value("${EBUY_AUTH_PASSWORD}")
+	private String ebuyPassword;
+
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {		 
 		if (user.equalsIgnoreCase(username)) {
@@ -38,6 +56,12 @@ public class JwtUserDetailsService implements UserDetailsService {
 			return new User(ccpUser, ccpPassword, new ArrayList<>()); 
 		} else if (cmoUser.equalsIgnoreCase(username)) {
 			return new User(cmoUser, cmoPassword, new ArrayList<>()); 
+		} else if (advUser.equalsIgnoreCase(username)) {
+			return new User(advUser, advPassword, new ArrayList<>());
+		} else if (elibUser.equalsIgnoreCase(username)) {
+			return new User(elibUser, elibPassword, new ArrayList<>());
+		} else if (ebuyUser.equalsIgnoreCase(username)) {
+			return new User(ebuyUser, ebuyPassword, new ArrayList<>());
 		} else {
 			throw new UsernameNotFoundException("User not found with username : " + username);
 		}
