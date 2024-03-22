@@ -33,6 +33,9 @@ public class JwtAuthenticationController {
 	private static String ACR_USER = "acr";
 	private static String CCP_USER = "ccp";
 	private static String CMO_USER = "cmo";
+	private static String ADV_USER = "adv";
+	private static String ELIB_USER = "elib";
+	private static String EBUY_USER = "ebuy";
 
 
 	@Autowired
@@ -84,8 +87,15 @@ public class JwtAuthenticationController {
 					" IP address : "+request.getRemoteAddr()+" Host: " + request.getRemoteHost());
 			throw new Exception("INVALID_CREDENTIALS", e);
 		}
-	}	
-	
+	}
+
+	@RequestMapping(value = "/getuser", method = RequestMethod.POST)
+	public String getUser(@RequestBody JwtRequest tokenRequest)
+			throws Exception {
+		String jwtToken = tokenRequest.getJwtToken();
+		return jwtTokenUtil.getUsernameFromToken(jwtToken);
+	}
+
 	@RequestMapping(value = "/validation", method = RequestMethod.POST)
 	public String validateJwtToken(@RequestBody JwtRequest tokenRequest)
 			throws Exception {	
@@ -147,6 +157,54 @@ public class JwtAuthenticationController {
 			tokenValidity = "valid";
 		}				
 	
+		return tokenValidity;
+	}
+
+	@RequestMapping(value = "/adv/validation", method = RequestMethod.POST)
+	public String validateAdvToken(@RequestBody JwtRequest tokenRequest)
+			throws Exception {
+
+		String jwtToken = tokenRequest.getJwtToken();
+		String tokenValidity = "invalid";
+
+		if(jwtTokenUtil.getUsernameFromToken(jwtToken) != null &&
+				jwtTokenUtil.getUsernameFromToken(jwtToken).equalsIgnoreCase(ADV_USER) &&
+				jwtTokenUtil.validateToken(jwtToken)){
+			tokenValidity = "valid";
+		}
+
+		return tokenValidity;
+	}
+
+	@RequestMapping(value = "/elib/validation", method = RequestMethod.POST)
+	public String validateElibToken(@RequestBody JwtRequest tokenRequest)
+			throws Exception {
+
+		String jwtToken = tokenRequest.getJwtToken();
+		String tokenValidity = "invalid";
+
+		if(jwtTokenUtil.getUsernameFromToken(jwtToken) != null &&
+				jwtTokenUtil.getUsernameFromToken(jwtToken).equalsIgnoreCase(ELIB_USER) &&
+				jwtTokenUtil.validateToken(jwtToken)){
+			tokenValidity = "valid";
+		}
+
+		return tokenValidity;
+	}
+
+	@RequestMapping(value = "/ebuy/validation", method = RequestMethod.POST)
+	public String validateEbuyToken(@RequestBody JwtRequest tokenRequest)
+			throws Exception {
+
+		String jwtToken = tokenRequest.getJwtToken();
+		String tokenValidity = "invalid";
+
+		if(jwtTokenUtil.getUsernameFromToken(jwtToken) != null &&
+				jwtTokenUtil.getUsernameFromToken(jwtToken).equalsIgnoreCase(EBUY_USER) &&
+				jwtTokenUtil.validateToken(jwtToken)){
+			tokenValidity = "valid";
+		}
+
 		return tokenValidity;
 	}
 }
