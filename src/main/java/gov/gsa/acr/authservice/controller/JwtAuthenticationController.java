@@ -87,8 +87,15 @@ public class JwtAuthenticationController {
 					" IP address : "+request.getRemoteAddr()+" Host: " + request.getRemoteHost());
 			throw new Exception("INVALID_CREDENTIALS", e);
 		}
-	}	
-	
+	}
+
+	@RequestMapping(value = "/getuser", method = RequestMethod.POST)
+	public String getUser(@RequestBody JwtRequest tokenRequest)
+			throws Exception {
+		String jwtToken = tokenRequest.getJwtToken();
+		return jwtTokenUtil.getUsernameFromToken(jwtToken);
+	}
+
 	@RequestMapping(value = "/validation", method = RequestMethod.POST)
 	public String validateJwtToken(@RequestBody JwtRequest tokenRequest)
 			throws Exception {	
