@@ -13,6 +13,7 @@ RUN find /home/gsa-user/.m2/ -iname '*.jar'
 RUN /usr/bin/jar tvf /home/gsa-user/target/auth-service.jar
 
 # --- copy jar file from previous stage
+
 RUN cp ./target/*.jar app.jar
 COPY startup.sh ./
 CMD [ "sh", "startup.sh" ]
