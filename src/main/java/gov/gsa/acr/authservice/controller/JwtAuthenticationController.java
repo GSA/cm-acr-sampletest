@@ -105,7 +105,7 @@ public class JwtAuthenticationController {
 		String tokenValidity = "invalid";
 		
 		if(jwtTokenUtil.getUsernameFromToken(jwtToken) != null && 
-								jwtTokenUtil.validateToken(jwtToken)){			
+				jwtTokenUtil.validateToken(jwtToken)){			
 			tokenValidity = "valid";
 		}
 
