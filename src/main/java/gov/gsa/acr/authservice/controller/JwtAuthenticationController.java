@@ -61,7 +61,6 @@ public class JwtAuthenticationController {
 	@RequestMapping(value = "/token", method = RequestMethod.POST)
 	public ResponseEntity<JwtResponse> getToken(HttpServletRequest request, @RequestBody JwtRequest authenticationRequest)
 			throws Exception {
-		logger.info("authenticationRequest.getPassword() "+authenticationRequest.getPassword());
 		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword(), request);
 		 
 		final UserDetails userDetails = jwtInMemoryUserDetailsService
