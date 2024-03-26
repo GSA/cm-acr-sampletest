@@ -50,12 +50,15 @@ public class JwtUserDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		System.out.println(user+ "password "+password);
-		System.out.println(ccpUser+ "ccpPassword "+ccpPassword);
-		System.out.println(cmoUser+ "cmoPassword "+cmoPassword);
-		System.out.println(advUser+ "advPassword "+advPassword);
-		System.out.println(elibUser+ "elibPassword "+elibPassword);
-		System.out.println(ebuyUser+ "ebuyPassword "+ebuyPassword);
+		System.out.println(user+ " password "+password);
+		System.out.println(ccpUser+ " ccpPassword "+ccpPassword);
+		System.out.println(cmoUser+ " cmoPassword "+cmoPassword);
+		System.out.println(advUser+ " adv user ");
+		System.out.println(elibUser+ " elib user");
+		System.out.println(ebuyUser+ " ebuyuser");
+		System.out.println( "advPassword "+advPassword);
+		System.out.println( "elibPassword "+elibPassword);
+		System.out.println( "ebuyPassword "+ebuyPassword);
 		if (user.equalsIgnoreCase(username)) {
 			System.out.println("password "+password);
 			return new User(user, password, new ArrayList<>());
