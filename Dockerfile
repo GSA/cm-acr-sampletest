@@ -1,4 +1,4 @@
-FROM 752281881774.dkr.ecr.us-east-1.amazonaws.com/odp_openjdk17:20231115
+FROM 752281881774.dkr.ecr.us-east-1.amazonaws.com/odp_openjdk17:20240407
 RUN mkdir -p ./src 
 COPY ./src ./src
 COPY ./pom.xml ./
@@ -16,9 +16,3 @@ RUN /usr/bin/jar tvf /home/gsa-user/target/auth-service.jar
 RUN cp ./target/*.jar app.jar
 COPY startup.sh ./
 CMD [ "sh", "startup.sh" ]
-
-
-
-
-
-
