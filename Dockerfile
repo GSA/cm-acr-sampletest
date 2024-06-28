@@ -19,9 +19,3 @@ COPY startup.sh ./
 COPY --from=builder /home/gsa-user/app/target/auth-service.jar app.jar
 
 CMD [ "sh", "startup.sh" ]
-
-
-
-
-
-
