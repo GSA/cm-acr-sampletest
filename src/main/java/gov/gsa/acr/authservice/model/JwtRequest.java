@@ -1,5 +1,7 @@
 package gov.gsa.acr.authservice.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.io.Serializable;
 
 public class JwtRequest implements Serializable {
@@ -8,7 +10,7 @@ public class JwtRequest implements Serializable {
 	
 	private String username;
 	private String password;
-	private String jwtToken;	
+	private String jwtToken;
 
 	public JwtRequest()
 	{
