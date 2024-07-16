@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.tags.Tags;
 import gov.gsa.acr.authservice.config.JwtTokenUtil;
 import gov.gsa.acr.authservice.model.JwtRequest;
 import gov.gsa.acr.authservice.model.JwtResponse;
@@ -49,16 +51,25 @@ public class JwtAuthenticationController {
 
 
 	@RequestMapping(value = "/liveliness", method = RequestMethod.GET)
+	@Tags(@Tag(name="Health", description = "Readiness and Liveliness checks"))
+	@Operation(summary = "Used by k8s to check health")
 	public String getLiveliness() {
 		return "ALIVE";
 	}
 
 	@RequestMapping(value = "/readiness", method = RequestMethod.GET)
+	@Tags(@Tag(name="Health", description = "Readiness and Liveliness checks"))
+	@Operation(summary = "Used by k8s to check health")
 	public String getReadinessliness() {
 		return "READY";
 	}
 
 	@RequestMapping(value = "/token", method = RequestMethod.POST)
+	@Tags(@Tag(name = "Authentication"))
+	@Operation(
+			summary = "Validates user name and password and return an auth token",
+			description = "Only username and password is required. jwtToken is unused in this case."
+	)
 	public ResponseEntity<JwtResponse> getToken(HttpServletRequest request, @RequestBody JwtRequest authenticationRequest)
 			throws Exception {
 		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword(), request);
@@ -90,6 +101,9 @@ public class JwtAuthenticationController {
 	}
 
 	@RequestMapping(value = "/getuser", method = RequestMethod.POST)
+	@Tags(@Tag(name = "Authentication"))
+	@Operation(summary = "Returns the username for the supplied JwtToken",
+			description = "Only the jwtToken parameter is required")
 	public String getUser(@RequestBody JwtRequest tokenRequest)
 			throws Exception {
 		String jwtToken = tokenRequest.getJwtToken();
@@ -97,6 +111,9 @@ public class JwtAuthenticationController {
 	}
 
 	@RequestMapping(value = "/validation", method = RequestMethod.POST)
+	@Tags(@Tag(name = "Authentication"))
+	@Operation(summary = "Checks the validity of a token. Returns 'valid' or 'invalid'",
+			description = "Only the jwtToken parameter is required")
 	public String validateJwtToken(@RequestBody JwtRequest tokenRequest)
 			throws Exception {	
 		
@@ -112,6 +129,9 @@ public class JwtAuthenticationController {
 	}
 	
 	@RequestMapping(value = "/acr/validation", method = RequestMethod.POST)
+	@Tags(@Tag(name = "Authentication"))
+	@Operation(summary = "Checks the validity of a token for the 'acr' user. Returns 'valid' or 'invalid'",
+			description = "Only the jwtToken parameter is required")
 	public String validateACRToken(@RequestBody JwtRequest tokenRequest)
 			throws Exception {	
 		
@@ -128,6 +148,9 @@ public class JwtAuthenticationController {
 	}
 	
 	@RequestMapping(value = "/ccp/validation", method = RequestMethod.POST)
+	@Tags(@Tag(name = "Authentication"))
+	@Operation(summary = "Checks the validity of a token for the 'ccp' user. Returns 'valid' or 'invalid'",
+			description = "Only the jwtToken parameter is required")
 	public String validateCCPToken(@RequestBody JwtRequest tokenRequest)
 			throws Exception {	
 		
@@ -144,6 +167,9 @@ public class JwtAuthenticationController {
 	}
 	
 	@RequestMapping(value = "/cmo/validation", method = RequestMethod.POST)
+	@Tags(@Tag(name = "Authentication"))
+	@Operation(summary = "Checks the validity of a token for the 'cmo' user. Returns 'valid' or 'invalid'",
+			description = "Only the jwtToken parameter is required")
 	public String validateCMOToken(@RequestBody JwtRequest tokenRequest)
 			throws Exception {	
 		
@@ -160,6 +186,9 @@ public class JwtAuthenticationController {
 	}
 
 	@RequestMapping(value = "/adv/validation", method = RequestMethod.POST)
+	@Tags(@Tag(name = "Authentication"))
+	@Operation(summary = "Checks the validity of a token for the 'adv' user. Returns 'valid' or 'invalid'",
+			description = "Only the jwtToken parameter is required")
 	public String validateAdvToken(@RequestBody JwtRequest tokenRequest)
 			throws Exception {
 
@@ -176,6 +205,9 @@ public class JwtAuthenticationController {
 	}
 
 	@RequestMapping(value = "/elib/validation", method = RequestMethod.POST)
+	@Tags(@Tag(name = "Authentication"))
+	@Operation(summary = "Checks the validity of a token for the 'elib' user. Returns 'valid' or 'invalid'",
+			description = "Only the jwtToken parameter is required")
 	public String validateElibToken(@RequestBody JwtRequest tokenRequest)
 			throws Exception {
 
@@ -192,6 +224,9 @@ public class JwtAuthenticationController {
 	}
 
 	@RequestMapping(value = "/ebuy/validation", method = RequestMethod.POST)
+	@Tags(@Tag(name = "Authentication"))
+	@Operation(summary = "Checks the validity of a token for the 'ebuy' user. Returns 'valid' or 'invalid'",
+			description = "Only the jwtToken parameter is required")
 	public String validateEbuyToken(@RequestBody JwtRequest tokenRequest)
 			throws Exception {
 
