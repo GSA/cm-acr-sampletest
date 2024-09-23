@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        service_name="832load"
+        service_name="authservice"
         image_name ="acr/$service_name"
         vpc_registry='556904013717.dkr.ecr.us-east-1.amazonaws.com'
         mcaas_registry='752281881774.dkr.ecr.us-east-1.amazonaws.com'
