@@ -23,7 +23,10 @@ pipeline {
         }
         stage('Pushing to ECR') {
             steps {
-                sh "docker push $vpc_registry/$image_name:$GIT_COMMIT"
+                sh """
+                    aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $vpc_registry
+                    docker push $vpc_registry/$image_name:$GIT_COMMIT
+                """
             }
         }
         stage('Update flux') {
