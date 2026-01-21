@@ -1,4 +1,4 @@
-FROM 752281881774.dkr.ecr.us-east-1.amazonaws.com/odp_ubuntu24_openjdk17:20260104
+FROM 752281881774.dkr.ecr.us-east-1.amazonaws.com/odp_ubuntu24_openjdk17:20260118
 
 RUN mkdir -p ./src 
 COPY ./src ./src
