@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -32,7 +33,17 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest(properties = {
         "ACR_AUTH_JWT_SECRET=abcdefg",
         "ACR_AUTH_USER=fake_user",
-        "ACR_AUTH_PASSWORD=$2a$10$oEb/eVKSKH5rWzSkZDFyXep0eU8ZENN/vvWS.56tRJEQ7ZHNrzsw."}) // fake_password
+        "ACR_AUTH_PASSWORD=$2a$10$oEb/eVKSKH5rWzSkZDFyXep0eU8ZENN/vvWS.56tRJEQ7ZHNrzsw.",
+        "CCP_AUTH_USER=fake_user",
+        "CCP_AUTH_PASSWORD=$2a$10$oEb/eVKSKH5rWzSkZDFyXep0eU8ZENN/vvWS.56tRJEQ7ZHNrzsw.",
+        "CMO_AUTH_USER=fake_user",
+        "CMO_AUTH_PASSWORD=$2a$10$oEb/eVKSKH5rWzSkZDFyXep0eU8ZENN/vvWS.56tRJEQ7ZHNrzsw.",
+        "ADV_AUTH_USER=fake_user",
+        "ADV_AUTH_PASSWORD=$2a$10$oEb/eVKSKH5rWzSkZDFyXep0eU8ZENN/vvWS.56tRJEQ7ZHNrzsw.",
+        "ELIB_AUTH_USER=fake_user",
+        "ELIB_AUTH_PASSWORD=$2a$10$oEb/eVKSKH5rWzSkZDFyXep0eU8ZENN/vvWS.56tRJEQ7ZHNrzsw.",
+        "EBUY_AUTH_USER=fake_user",
+        "EBUY_AUTH_PASSWORD=$2a$10$oEb/eVKSKH5rWzSkZDFyXep0eU8ZENN/vvWS.56tRJEQ7ZHNrzsw."}) // fake_password
 class AuthServiceApplicationTests {
 
     @MockitoBean
@@ -40,6 +51,8 @@ class AuthServiceApplicationTests {
 
     @MockitoBean
     JwtUserDetailsService jwtUserDetailsService;
+
+    UserDetailsService
 
     @Autowired
     JwtAuthenticationController client;
