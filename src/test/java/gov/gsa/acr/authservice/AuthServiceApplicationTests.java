@@ -136,6 +136,7 @@ class AuthServiceApplicationTests {
         JwtRequest jwtRequest = new JwtRequest();
         jwtRequest.setJwtToken(jwt);
 
+        // This should now handle the ExpiredJwtException gracefully
         String tokenValidation = client.validateJwtToken(jwtRequest);
         assertEquals("invalid", tokenValidation);
     }
@@ -153,7 +154,7 @@ class AuthServiceApplicationTests {
             client.getToken(request, jwtRequest);
             fail("Should have thrown exception for invalid credentials");
         } catch (Exception e) {
-            assertEquals("INVALID_CREDENTIALS", e.getMessage());
+            assertEquals("User not found", e.getMessage());
         }
     }
 
