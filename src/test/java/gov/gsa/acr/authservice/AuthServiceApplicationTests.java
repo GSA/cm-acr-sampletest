@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,6 +30,7 @@ import java.util.Map;
 import java.util.Calendar;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest(properties = {
         "ACR_AUTH_JWT_SECRET=abcdefg",
@@ -58,6 +60,98 @@ class AuthServiceApplicationTests {
     @Value("${ACR_AUTH_JWT_SECRET}")
     String JWT_SECRET;
 
+
+    package gov.gsa.acr.authservice;
+
+import gov.gsa.acr.authservice.controller.JwtAuthenticationController;
+import gov.gsa.acr.authservice.model.JwtRequest;
+import gov.gsa.acr.authservice.model.JwtResponse;
+import gov.gsa.acr.authservice.service.JwtUserDetailsService;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockitoBean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static when;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Calendar;
+
+    @SpringBootTest(properties = {
+            "ACR_AUTH_JWT_SECRET=abcdefg",
+            "ACR_AUTH_USER=fake_user",
+            "ACR_AUTH_PASSWORD=$2a$10$oEb/eVKSKH5rWzSkZDFyXep0eU8ZENN/vvWS.56tRJEQ7ZHNrzsw."}) // fake_password
+    class AuthServiceApplicationTests {
+
+        @Autowired
+        JwtAuthenticationController client;
+
+        @Value("${ACR_AUTH_JWT_SECRET}")
+        String JWT_SECRET;
+
+        @MockitoBean
+        JwtUserDetailsService jwtUserDetailsService;
+
+        @BeforeEach
+        public void setUp() {
+            // Mock the behavior of JwtUserDetailsService
+            setupMockUserDetails();
+        }
+
+        private void setupMockUserDetails() {
+            // Mock valid users
+            String encodedPassword = "$2a$10$oEb/eVKSKH5rWzSkZDFyXep0eU8ZENN/vvWS.56tRJEQ7ZHNrzsw."; // fake_password
+
+            UserDetails fakeUser = new User("fake_user", encodedPassword, new ArrayList<>());
+            UserDetails acrUser = new User("acr", encodedPassword, new ArrayList<>());
+            UserDetails ccpUser = new User("ccp", encodedPassword, new ArrayList<>());
+            UserDetails cmoUser = new User("cmo", encodedPassword, new ArrayList<>());
+            UserDetails advUser = new User("adv", encodedPassword, new ArrayList<>());
+            UserDetails elibUser = new User("elib", encodedPassword, new ArrayList<>());
+            UserDetails ebuyUser = new User("ebuy", encodedPassword, new ArrayList<>());
+
+            // Configure mock behavior
+            when(jwtUserDetailsService.loadUserByUsername("fake_user")).thenReturn(fakeUser);
+            when(jwtUserDetailsService.loadUserByUsername("acr")).thenReturn(acrUser);
+            when(jwtUserDetailsService.loadUserByUsername("ccp")).thenReturn(ccpUser);
+            when(jwtUserDetailsService.loadUserByUsername("cmo")).thenReturn(cmoUser);
+            when(jwtUserDetailsService.loadUserByUsername("adv")).thenReturn(advUser);
+            when(jwtUserDetailsService.loadUserByUsername("elib")).thenReturn(elibUser);
+            when(jwtUserDetailsService.loadUserByUsername("ebuy")).thenReturn(ebuyUser);
+
+            // Mock invalid users to throw exception
+            when(jwtUserDetailsService.loadUserByUsername("fake_user_that_does_not_exist"))
+                    .thenThrow(new UsernameNotFoundException("User not found"));
+            when(jwtUserDetailsService.loadUserByUsername("fakse_user"))
+                    .thenThrow(new UsernameNotFoundException("User not found"));
+            when(jwtUserDetailsService.loadUserByUsername("non_existent_user"))
+                    .thenThrow(new UsernameNotFoundException("User not found"));
+
+            // Mock null and empty usernames
+            when(jwtUserDetailsService.loadUserByUsername(null))
+                    .thenThrow(new UsernameNotFoundException("Username cannot be null"));
+            when(jwtUserDetailsService.loadUserByUsername(""))
+                    .thenThrow(new UsernameNotFoundException("Username cannot be empty"));
+        }
     @Test
     public void testValidCredential() throws Exception {
         String user = "fake_user";
@@ -83,22 +177,17 @@ class AuthServiceApplicationTests {
         Calendar yesterday = Calendar.getInstance();
         yesterday.add(Calendar.DAY_OF_MONTH, -1);
 
-        String jwt = generateJwt("fake_user", yesterday); // Use a valid user
+        String jwt = generateJwt("fake_user", yesterday);
         JwtRequest jwtRequest = new JwtRequest();
         jwtRequest.setJwtToken(jwt);
 
-        try {
-            String tokenValidation = client.validateJwtToken(jwtRequest);
-            assertEquals("invalid", tokenValidation);
-        } catch (Exception e) {
-            // If an exception is thrown due to expired token, that's also acceptable
-            assertTrue(e.getMessage().contains("expired") || e.getMessage().contains("JWT"));
-        }
+        String tokenValidation = client.validateJwtToken(jwtRequest);
+        assertEquals("invalid", tokenValidation);
     }
 
     @Test
     public void testInvalidCredential() throws Exception {
-        String user = "nonexistent_user";  // Use a user that definitely doesn't exist
+        String user = "fake_user_that_does_not_exist";
         String pwd = "invalid_password";
         JwtRequest jwtRequest = new JwtRequest();
         jwtRequest.setUsername(user);
@@ -109,13 +198,7 @@ class AuthServiceApplicationTests {
             client.getToken(request, jwtRequest);
             fail("Should have thrown exception for invalid credentials");
         } catch (Exception e) {
-            // The actual exception message might vary, so check for common authentication error patterns
-            String message = e.getMessage();
-            assertTrue(message != null &&
-                            (message.contains("INVALID_CREDENTIALS") ||
-                                    message.contains("User not found") ||
-                                    message.contains("Bad credentials")),
-                    "Expected authentication error, got: " + message);
+            assertEquals("INVALID_CREDENTIALS", e.getMessage());
         }
     }
 
