@@ -18,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 
 import java.util.Date;
 import java.util.HashMap;
@@ -94,7 +96,7 @@ class AuthServiceApplicationTests {
         System.out.println(encruptedPassword);
         assertTrue(passwordEncoder.matches(clearPassword, encruptedPassword));
     }
-    
+
 
     // User-Specific Token Validation Tests
     @Test
@@ -133,7 +135,7 @@ class AuthServiceApplicationTests {
         JwtRequest jwtRequest = new JwtRequest();
         jwtRequest.setJwtToken(jwt);
 
-        String tokenValidation = client.validateADVToken(jwtRequest);
+        String tokenValidation = client.validateAdvToken(jwtRequest);
         assertEquals("valid", tokenValidation);
     }
 
