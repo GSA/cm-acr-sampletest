@@ -52,5 +52,6 @@ pipeline {
         always {
             // This captures the reports even if the build fails
             junit '**/target/surefire-reports/*.xml'
+        }
     }
 }
