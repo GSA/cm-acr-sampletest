@@ -623,7 +623,7 @@ class AuthServiceApplicationTests {
         assertEquals("invalid", client.validateACRToken(jwtRequest));
         assertEquals("invalid", client.validateCCPToken(jwtRequest));
         assertEquals("invalid", client.validateCMOToken(jwtRequest));
-        assertEquals("invalid", client.validateADVToken(jwtRequest));
+        assertEquals("invalid", client.validateAdvToken(jwtRequest));
         assertEquals("invalid", client.validateElibToken(jwtRequest));
         assertEquals("invalid", client.validateEbuyToken(jwtRequest));
     }
@@ -646,7 +646,7 @@ class AuthServiceApplicationTests {
         assertEquals("invalid", client.validateCMOToken(jwtRequest));
 
         jwtRequest.setJwtToken(generateJwtForUserWithExpiry("adv", yesterday));
-        assertEquals("invalid", client.validateADVToken(jwtRequest));
+        assertEquals("invalid", client.validateAdvToken(jwtRequest));
 
         jwtRequest.setJwtToken(generateJwtForUserWithExpiry("elib", yesterday));
         assertEquals("invalid", client.validateElibToken(jwtRequest));
