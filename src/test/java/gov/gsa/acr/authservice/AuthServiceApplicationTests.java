@@ -94,13 +94,7 @@ class AuthServiceApplicationTests {
         System.out.println(encruptedPassword);
         assertTrue(passwordEncoder.matches(clearPassword, encruptedPassword));
     }
-
-    private String generateJwt(String subject, Calendar expireDate) {
-        Date expiryDate = expireDate.getTime();
-        Map<String, Object> claims = new HashMap<>();
-        return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(expiryDate/*new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY*1000)*/).signWith(SignatureAlgorithm.HS512, JWT_SECRET).compact();
-    }
+    
 
     // User-Specific Token Validation Tests
     @Test
