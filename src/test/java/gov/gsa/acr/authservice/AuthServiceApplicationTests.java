@@ -7,6 +7,7 @@ import gov.gsa.acr.authservice.service.JwtUserDetailsService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,98 +61,49 @@ class AuthServiceApplicationTests {
     @Value("${ACR_AUTH_JWT_SECRET}")
     String JWT_SECRET;
 
+    @BeforeEach
+    public void setUp() {
+        // Mock the behavior of JwtUserDetailsService
+        setupMockUserDetails();
+    }
+    private void setupMockUserDetails() {
+        // Mock valid users
+        String encodedPassword = "$2a$10$oEb/eVKSKH5rWzSkZDFyXep0eU8ZENN/vvWS.56tRJEQ7ZHNrzsw."; // fake_password
 
-    package gov.gsa.acr.authservice;
+        UserDetails fakeUser = new User("fake_user", encodedPassword, new ArrayList<>());
+        UserDetails acrUser = new User("acr", encodedPassword, new ArrayList<>());
+        UserDetails ccpUser = new User("ccp", encodedPassword, new ArrayList<>());
+        UserDetails cmoUser = new User("cmo", encodedPassword, new ArrayList<>());
+        UserDetails advUser = new User("adv", encodedPassword, new ArrayList<>());
+        UserDetails elibUser = new User("elib", encodedPassword, new ArrayList<>());
+        UserDetails ebuyUser = new User("ebuy", encodedPassword, new ArrayList<>());
 
-import gov.gsa.acr.authservice.controller.JwtAuthenticationController;
-import gov.gsa.acr.authservice.model.JwtRequest;
-import gov.gsa.acr.authservice.model.JwtResponse;
-import gov.gsa.acr.authservice.service.JwtUserDetailsService;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+        // Configure mock behavior
+        when(jwtUserDetailsService.loadUserByUsername("fake_user")).thenReturn(fakeUser);
+        when(jwtUserDetailsService.loadUserByUsername("acr")).thenReturn(acrUser);
+        when(jwtUserDetailsService.loadUserByUsername("ccp")).thenReturn(ccpUser);
+        when(jwtUserDetailsService.loadUserByUsername("cmo")).thenReturn(cmoUser);
+        when(jwtUserDetailsService.loadUserByUsername("adv")).thenReturn(advUser);
+        when(jwtUserDetailsService.loadUserByUsername("elib")).thenReturn(elibUser);
+        when(jwtUserDetailsService.loadUserByUsername("ebuy")).thenReturn(ebuyUser);
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockitoBean;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+        // Mock invalid users to throw exception
+        when(jwtUserDetailsService.loadUserByUsername("fake_user_that_does_not_exist"))
+                .thenThrow(new UsernameNotFoundException("User not found"));
+        when(jwtUserDetailsService.loadUserByUsername("fakse_user"))
+                .thenThrow(new UsernameNotFoundException("User not found"));
+        when(jwtUserDetailsService.loadUserByUsername("non_existent_user"))
+                .thenThrow(new UsernameNotFoundException("User not found"));
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
-import static when;
+        // Mock null and empty usernames
+        when(jwtUserDetailsService.loadUserByUsername(null))
+                .thenThrow(new UsernameNotFoundException("Username cannot be null"));
+        when(jwtUserDetailsService.loadUserByUsername(""))
+                .thenThrow(new UsernameNotFoundException("Username cannot be empty"));
+    }
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Calendar;
 
-    @SpringBootTest(properties = {
-            "ACR_AUTH_JWT_SECRET=abcdefg",
-            "ACR_AUTH_USER=fake_user",
-            "ACR_AUTH_PASSWORD=$2a$10$oEb/eVKSKH5rWzSkZDFyXep0eU8ZENN/vvWS.56tRJEQ7ZHNrzsw."}) // fake_password
-    class AuthServiceApplicationTests {
 
-        @Autowired
-        JwtAuthenticationController client;
-
-        @Value("${ACR_AUTH_JWT_SECRET}")
-        String JWT_SECRET;
-
-        @MockitoBean
-        JwtUserDetailsService jwtUserDetailsService;
-
-        @BeforeEach
-        public void setUp() {
-            // Mock the behavior of JwtUserDetailsService
-            setupMockUserDetails();
-        }
-
-        private void setupMockUserDetails() {
-            // Mock valid users
-            String encodedPassword = "$2a$10$oEb/eVKSKH5rWzSkZDFyXep0eU8ZENN/vvWS.56tRJEQ7ZHNrzsw."; // fake_password
-
-            UserDetails fakeUser = new User("fake_user", encodedPassword, new ArrayList<>());
-            UserDetails acrUser = new User("acr", encodedPassword, new ArrayList<>());
-            UserDetails ccpUser = new User("ccp", encodedPassword, new ArrayList<>());
-            UserDetails cmoUser = new User("cmo", encodedPassword, new ArrayList<>());
-            UserDetails advUser = new User("adv", encodedPassword, new ArrayList<>());
-            UserDetails elibUser = new User("elib", encodedPassword, new ArrayList<>());
-            UserDetails ebuyUser = new User("ebuy", encodedPassword, new ArrayList<>());
-
-            // Configure mock behavior
-            when(jwtUserDetailsService.loadUserByUsername("fake_user")).thenReturn(fakeUser);
-            when(jwtUserDetailsService.loadUserByUsername("acr")).thenReturn(acrUser);
-            when(jwtUserDetailsService.loadUserByUsername("ccp")).thenReturn(ccpUser);
-            when(jwtUserDetailsService.loadUserByUsername("cmo")).thenReturn(cmoUser);
-            when(jwtUserDetailsService.loadUserByUsername("adv")).thenReturn(advUser);
-            when(jwtUserDetailsService.loadUserByUsername("elib")).thenReturn(elibUser);
-            when(jwtUserDetailsService.loadUserByUsername("ebuy")).thenReturn(ebuyUser);
-
-            // Mock invalid users to throw exception
-            when(jwtUserDetailsService.loadUserByUsername("fake_user_that_does_not_exist"))
-                    .thenThrow(new UsernameNotFoundException("User not found"));
-            when(jwtUserDetailsService.loadUserByUsername("fakse_user"))
-                    .thenThrow(new UsernameNotFoundException("User not found"));
-            when(jwtUserDetailsService.loadUserByUsername("non_existent_user"))
-                    .thenThrow(new UsernameNotFoundException("User not found"));
-
-            // Mock null and empty usernames
-            when(jwtUserDetailsService.loadUserByUsername(null))
-                    .thenThrow(new UsernameNotFoundException("Username cannot be null"));
-            when(jwtUserDetailsService.loadUserByUsername(""))
-                    .thenThrow(new UsernameNotFoundException("Username cannot be empty"));
-        }
     @Test
     public void testValidCredential() throws Exception {
         String user = "fake_user";
