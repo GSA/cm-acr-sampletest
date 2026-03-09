@@ -52,8 +52,6 @@ class AuthServiceApplicationTests {
     @MockitoBean
     JwtUserDetailsService jwtUserDetailsService;
 
-    UserDetailsService
-
     @Autowired
     JwtAuthenticationController client;
 
